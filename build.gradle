@@ -1,0 +1,20 @@
+apply plugin: 'java'
+apply plugin: 'application'
+
+allprojects {
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+}
+
+jar {
+    baseName = 'simpleCount'
+    version = '0.1.0'
+}
+
+
+mainClassName = 'me.zirko.Main'
+
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.1'
+}
