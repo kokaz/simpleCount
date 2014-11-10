@@ -19,10 +19,6 @@ jar {
     version = '0.1.0'
 }
 
-dependencies {
-    compile 'org.eclipse.swt:org.eclipse.swt.gtk.linux.x86_64:4.+'
-}
-
 mainClassName = 'me.zirko.Main'
 
 
