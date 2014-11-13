@@ -19,7 +19,7 @@ jar {
     version = '0.1.0'
 }
 
-mainClassName = 'me.zirko.Main'
+mainClassName = 'me.zirko.ui.Calculator'
 
 
 task wrapper(type: Wrapper) {

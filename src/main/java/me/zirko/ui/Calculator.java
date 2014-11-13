@@ -1,10 +1,15 @@
 package me.zirko.ui;
 
 import me.zirko.ExpressionBuilder;
-import me.zirko.util.UIUtil;
+import me.zirko.ui.widget.CalculatorPanel;
+import me.zirko.ui.widget.FunctionButton;
+import me.zirko.ui.widget.NumberButton;
+import me.zirko.util.UIUtils;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -16,18 +21,20 @@ import java.awt.event.WindowEvent;
  * @version 1.0
  * @since 1.0
  */
-public class Calculator extends JFrame {
+public class Calculator extends JFrame implements ActionListener {
     private ExpressionBuilder mExprBuilder;
-    private JPanel mContainer = new JPanel();
-    private JLabel mResult = new JLabel("", SwingConstants.RIGHT);
-
-    GridLayout mLayoutManager = new GridLayout(5, 6);
+    private CalculatorPanel mContainer;
+    private boolean mFunctionPressed = false;
 
     public Calculator() {
         super("JCalculator");
         init();
-
         setVisible(true);
+        mExprBuilder = new ExpressionBuilder(mContainer);
+    }
+
+    public static void main(String[] args) {
+        new Calculator();
     }
 
     /**
@@ -36,7 +43,7 @@ public class Calculator extends JFrame {
      * <p>It should be called after a call to super()</p>
      */
     private void init() {
-        setSize(380, 250);
+        setSize(380, 400);
         setResizable(false);
         setIcon();
         setDesign();
@@ -47,8 +54,7 @@ public class Calculator extends JFrame {
                 System.exit(0);
             }
         });
-        mContainer.setBackground(Color.DARK_GRAY);
-        mContainer.setLayout(mLayoutManager);
+        mContainer = new CalculatorPanel(this);
         setContentPane(mContainer);
         //TODO centerWindow();
     }
@@ -79,9 +85,27 @@ public class Calculator extends JFrame {
      */
     private void setIcon() {
         try {
-            setIconImage(UIUtil.createImageFromRes("icon.gif", "icon"));
+            setIconImage(UIUtils.createImageFromRes("icon.gif", "icon"));
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        Object o = e.getSource();
+        if (o instanceof NumberButton) {
+            if (mFunctionPressed) {
+                mContainer.clear();
+                mFunctionPressed = false;
+            }
+
+            mContainer.concatResult(((JButton) o).getText());
+        } else if (o instanceof FunctionButton) {
+            mFunctionPressed = true;
+
+            String res = mContainer.getResult();
+            mExprBuilder.build(((JButton) o).getActionCommand(), Double.valueOf(res));
         }
     }
 }

@@ -10,7 +10,7 @@ import javax.swing.*;
  * @version 1.0
  * @since 1.0
  */
-public class UIUtil {
+public class UIUtils {
     public static java.awt.Image createImageFromRes(String path,
                                                     String description) {
         return createImageIconFromRes(path, description).getImage();
@@ -18,7 +18,7 @@ public class UIUtil {
 
     public static ImageIcon createImageIconFromRes(String path,
                                                    String description) {
-        java.net.URL imgURL = UIUtil.class.getResource("/assets/" + path);
+        java.net.URL imgURL = UIUtils.class.getResource("/assets/" + path);
         if (imgURL != null) {
             return new ImageIcon(imgURL, description);
         } else {
