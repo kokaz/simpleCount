@@ -59,7 +59,7 @@ public class CalculatorPanel extends JPanel {
 
         mResult.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
         mResult.setFont(mFont);
-        mResult.setPreferredSize(new Dimension(350, 60));
+        mResult.setPreferredSize(new Dimension(420, 60));
         Border borderColor = BorderFactory.createLineBorder(new Color(0, 0, 0));
         mResult.setBorder(BorderFactory.createCompoundBorder(borderColor, mPaddingBorder));
         mRow[0].add(mResult);
@@ -103,23 +103,6 @@ public class CalculatorPanel extends JPanel {
         mButtons.put("pi", new FunctionButton("Pi"));
         mButtons.put("euler", new FunctionButton("e"));
         mButtons.put("pow", new FunctionButton("x^y"));
-    }
-
-    public void clear() {
-        mResult.setText("0");
-    }
-
-    public void concatResult(String res) {
-        String r = mResult.getText() + res;
-
-        if (r.charAt(0) == '0' && r.charAt(1) != '.') {
-            r = String.valueOf(r.subSequence(1, r.length()));
-        }
-        mResult.setText(r);
-    }
-
-    public String getResult() {
-        return mResult.getText();
     }
 
     public void setResult(String res) {

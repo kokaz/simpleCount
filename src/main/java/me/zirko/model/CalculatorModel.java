@@ -41,6 +41,7 @@ public class CalculatorModel extends Observable {
         mSpecialOperators.add("cosh");
         mSpecialOperators.add("tan");
         mSpecialOperators.add("tanh");
+        mSpecialOperators.add("exp");
         mSpecialOperators.add("log");
         mSpecialOperators.add("ln");
         mSpecialOperators.add("sqr");
@@ -150,6 +151,18 @@ public class CalculatorModel extends Observable {
             isResultNaN = true;
         }
         mResult %= operand;
+        setChanged();
+    }
+
+    /**
+     * Compute exponential of operand
+     * <p>
+     * Act like e^operand
+     *
+     * @param operand Actual operand
+     */
+    public void exp(Double operand) {
+        mResult = Math.exp(operand);
         setChanged();
     }
 
