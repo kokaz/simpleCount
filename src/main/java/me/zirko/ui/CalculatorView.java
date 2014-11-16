@@ -5,7 +5,6 @@ import me.zirko.ui.view.widget.CalculatorPanel;
 import me.zirko.util.UIUtils;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Observable;
@@ -63,16 +62,6 @@ public class CalculatorView extends JFrame implements Observer {
         });
         mContainer = new CalculatorPanel(mController);
         setContentPane(mContainer);
-        //TODO centerWindow();
-    }
-
-    /**
-     * This method center the window in the available screen space : <br/>
-     * new position = (Screen size / 2) - (Window size / 2)
-     */
-    private void centerWindow() {
-        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        setLocation(dim.width / 2 - getWidth() / 2, dim.height / 2 - getHeight() / 2);
     }
 
     private void setDesign() {

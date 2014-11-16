@@ -253,7 +253,6 @@ public class CalculatorModel extends Observable {
      */
     public void sqr(Double operand) {
         mResult = Math.pow(operand, 2);
-        ;
         setChanged();
     }
 
@@ -295,7 +294,7 @@ public class CalculatorModel extends Observable {
      *
      * @param operand Actual operand
      */
-    public void negate(Double operand) {
+    public void negate(@SuppressWarnings("unused") Double operand) {
         if (mOperand.charAt(0) == '-') {
             mOperand = mOperand.substring(1);
         } else {
@@ -330,7 +329,7 @@ public class CalculatorModel extends Observable {
      * @param a unused
      * @see CalculatorModel#pi()
      */
-    public void pi(Double a) {
+    public void pi(@SuppressWarnings("unused") Double a) {
         pi();
     }
 
@@ -338,7 +337,7 @@ public class CalculatorModel extends Observable {
      * @param a unused
      * @see CalculatorModel#euler()
      */
-    public void euler(Double a) {
+    public void euler(@SuppressWarnings("unused") Double a) {
         euler();
     }
 
@@ -346,7 +345,7 @@ public class CalculatorModel extends Observable {
      * @param a unused
      * @see CalculatorModel#reset()
      */
-    public void reset(Double a) {
+    public void reset(@SuppressWarnings("unused") Double a) {
         reset();
     }
 
@@ -368,7 +367,7 @@ public class CalculatorModel extends Observable {
      * @param a unused
      * @see CalculatorModel#clear()
      */
-    public void clear(Double a) {
+    public void clear(@SuppressWarnings("unused") Double a) {
         clear();
     }
 

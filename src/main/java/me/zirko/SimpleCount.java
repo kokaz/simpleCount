@@ -1,8 +1,8 @@
 package me.zirko;
 
-import me.zirko.ui.CalculatorView;
 import me.zirko.controller.CalculatorController;
 import me.zirko.model.CalculatorModel;
+import me.zirko.ui.CalculatorView;
 
 public class SimpleCount {
     public static void main(String[] args) {
