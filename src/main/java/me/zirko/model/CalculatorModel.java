@@ -25,7 +25,7 @@ import java.util.Observable;
  */
 public class CalculatorModel extends Observable {
     private Double mResult = 0.0;
-    private String mOperand = "";
+    private String mOperand = "0";
     private String mOperator = "";
     private List<String> mSpecialOperators = new ArrayList<>();
     private String mOldOperator = "";
@@ -58,7 +58,7 @@ public class CalculatorModel extends Observable {
     public void notifyObservers(Object arg) {
         String argStr = (String) arg;
 
-        if ("^0[0-9]+".matches(argStr)) {
+        if (argStr.matches("^0[0-9]+")) {
             argStr = argStr.substring(1, argStr.length());
         }
 
