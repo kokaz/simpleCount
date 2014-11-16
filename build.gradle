@@ -2,26 +2,46 @@ apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'application'
 
-repositories {
-    mavenCentral()
-    maven {
-        url "https://swt-repo.googlecode.com/svn/repo/"
-    }
-}
-
 allprojects {
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
 }
 
-jar {
-    baseName = 'simpleCount'
-    version = '0.1.0'
+repositories {
+    mavenCentral()
 }
 
-mainClassName = 'me.zirko.ui.Calculator'
+jar {
+    baseName = 'simpleCount'
+    version = '1.0'
+}
 
+mainClassName = 'me.zirko.SimpleCount'
+
+test {
+    useJUnit()
+
+    testLogging.showStandardStreams = true
+
+    // set heap size for the test JVM(s)
+    minHeapSize = "128m"
+    maxHeapSize = "512m"
+
+    // listen to events in the test execution lifecycle
+    beforeTest { descriptor ->
+        logger.lifecycle("Running test: " + descriptor)
+    }
+
+    // listen to standard out and standard error of the test JVM(s)
+    onOutput { descriptor, event ->
+        logger.lifecycle("Test: " + descriptor + " produced standard out/err: " + event.message )
+    }
+}
 
 task wrapper(type: Wrapper) {
     gradleVersion = '2.1'
+}
+
+dependencies {
+    testCompile 'junit:junit:4.11'
 }

@@ -4,7 +4,7 @@ import javax.swing.*;
 
 /**
  * This class is an utility class that help developer
- * not to make redundant static code
+ * not to make redundant static code on UI calls
  *
  * @author Guillaume Fillon
  * @version 1.0

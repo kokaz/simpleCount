@@ -1,18 +1,18 @@
-package me.zirko.ui.widget;
+package me.zirko.ui.view.widget;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
-public class NumberButton extends JButton {
+public class FunctionButton extends JButton {
 
-    public NumberButton(String text, ActionListener listener) {
+    public FunctionButton(String text, ActionListener listener) {
         super(text);
         setPreferredSize(new Dimension(50, 50));
         addActionListener(listener);
     }
 
-    public NumberButton(String text) {
+    public FunctionButton(String text) {
         super(text);
         setPreferredSize(new Dimension(50, 50));
     }

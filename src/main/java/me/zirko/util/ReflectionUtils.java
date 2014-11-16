@@ -20,6 +20,7 @@ public class ReflectionUtils {
         return null;
     }
 
+    @SuppressWarnings("unchecked")
     public static <E> E callWithDefault(Object target, String methodName, E defaultValue) {
         try {
             //noinspection unchecked
