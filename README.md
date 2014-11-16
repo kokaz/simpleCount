@@ -40,4 +40,4 @@ of data modifications.
 The Controller is the bridge between the View and the Model
 
 For more information, I suggestion you to have look in the __doc__ folder
-where all the project *JavaDoc* is compiled
+or see the online doc at [https://kokaz.github.io/simpleCount](https://kokaz.github.io/simpleCount) where all the project *JavaDoc* is compiled
