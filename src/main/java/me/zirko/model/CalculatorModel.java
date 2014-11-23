@@ -1,15 +1,13 @@
 package me.zirko.model;
 
-import me.zirko.util.ReflectionUtils;
+import me.zirko.util.MathEvaluator;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Observable;
 
 /**
- * {@link me.zirko.model.CalculatorModel} is the model that interacts with the user data 
+ * {@link CalculatorModel} is the model that interacts with the user data
  * sent by {@link me.zirko.controller.CalculatorController}.
  * <p>
  * The class compute all the data user (operations, numbers, etc...)
@@ -25,407 +23,54 @@ import java.util.Observable;
  */
 public class CalculatorModel extends Observable {
     private Double mResult = 0.0;
-    private String mOperand = "0";
-    private String mOperator = "";
-    private List<String> mSpecialOperators = new ArrayList<>();
-    private String mOldOperator = "";
+    private String mExpr = "";
     private boolean isResultNaN = false;
-    private boolean needOperandUpdate = true;
     private boolean isDecimal = false;
-
-    public CalculatorModel() {
-        mSpecialOperators.add("equal");
-        mSpecialOperators.add("sin");
-        mSpecialOperators.add("sinh");
-        mSpecialOperators.add("cos");
-        mSpecialOperators.add("cosh");
-        mSpecialOperators.add("tan");
-        mSpecialOperators.add("tanh");
-        mSpecialOperators.add("exp");
-        mSpecialOperators.add("log");
-        mSpecialOperators.add("ln");
-        mSpecialOperators.add("sqr");
-        mSpecialOperators.add("sqrt");
-        mSpecialOperators.add("pi");
-        mSpecialOperators.add("euler");
-        mSpecialOperators.add("inverse");
-        mSpecialOperators.add("negate");
-        mSpecialOperators.add("reset");
-        mSpecialOperators.add("clear");
-    }
 
     @Override
     public void notifyObservers(Object arg) {
         String argStr = (String) arg;
 
-        if (argStr.matches("^0[0-9]+")) {
+        while (argStr.matches("^0[0-9]+\\.?.*")) {
             argStr = argStr.substring(1, argStr.length());
         }
+
+        setChanged();
 
         super.notifyObservers(argStr);
     }
 
-    /**
-     * This method use {@link me.zirko.util.ReflectionUtils} to use the appropriate method
-     * for calculating the last operation thanks to the {@link CalculatorModel#mOperator}
-     * which set the {@link CalculatorModel#mResult} with the good result
-     */
-    private void computeData() {
-        if ("".equals(mOperator)) {
-            mResult = Double.parseDouble(mOperand);
+    public void setOperator(String actionCommand, String label, boolean isScientific) {
+        if (isScientific) {
+            mExpr += actionCommand;
         } else {
-            try {
-                ReflectionUtils.tryInvoke(this, mOperator, Double.parseDouble(mOperand));
-            } catch (NumberFormatException e) {
-                ReflectionUtils.tryInvoke(this, mOperator, mResult);
-            }
+            mExpr += label;
         }
 
-        if (!mSpecialOperators.contains(mOperator) && needOperandUpdate) {
-            mOperand = "";
-            isDecimal = false;
-        } else {
-            needOperandUpdate = true;
-        }
-
-        notifyObservers(getSimplifiedResult());
-    }
-
-    /**
-     * Compute an addition of {@link CalculatorModel#mResult} and operand
-     * <p>
-     * Act like {@link CalculatorModel#mResult} + operand
-     *
-     * @param operand Actual operand
-     */
-    public void add(Double operand) {
-        mResult += operand;
-        setChanged();
-    }
-
-    /**
-     * Compute a subtraction of {@link CalculatorModel#mResult} and operand
-     * <p>
-     * Act like {@link CalculatorModel#mResult} - operand
-     *
-     * @param operand Actual operand
-     */
-    public void subtraction(Double operand) {
-        mResult -= operand;
-        setChanged();
-    }
-
-    /**
-     * Compute a product of {@link CalculatorModel#mResult} and operand
-     * <p>
-     * Act like {@link CalculatorModel#mResult} * operand
-     *
-     * @param operand Actual operand
-     */
-    public void multiplication(Double operand) {
-        mResult *= operand;
-        setChanged();
-    }
-
-    /**
-     * Compute a division of {@link CalculatorModel#mResult} and operand
-     * <p>
-     * Act like {@link CalculatorModel#mResult} / operand
-     *
-     * @param operand Actual operand
-     */
-    public void division(Double operand) {
-        mResult /= operand;
-        setChanged();
-    }
-
-    /**
-     * Compute a modulo of {@link CalculatorModel#mResult} and operand
-     * <p>
-     * Act like {@link CalculatorModel#mResult} % operand
-     *
-     * @param operand Actual operand
-     */
-    public void modulo(Double operand) {
-        if (operand == 0.0) {
-            isResultNaN = true;
-        }
-        mResult %= operand;
-        setChanged();
-    }
-
-    /**
-     * Compute exponential of operand
-     * <p>
-     * Act like e^operand
-     *
-     * @param operand Actual operand
-     */
-    public void exp(Double operand) {
-        mResult = Math.exp(operand);
-        setChanged();
-    }
-
-    /**
-     * Compute a {@link java.lang.Math#sin} operand (converted to Radians)
-     *
-     * @param operand Actual operand
-     */
-    public void sin(Double operand) {
-        mResult = Math.sin(Math.toRadians(operand));
-        setChanged();
-    }
-
-    /**
-     * Compute a {@link java.lang.Math#sinh} operand (converted to Radians)
-     *
-     * @param operand Actual operand
-     */
-    public void sinh(Double operand) {
-        mResult = Math.sinh(Math.toRadians(operand));
-        setChanged();
-    }
-
-    /**
-     * Compute a {@link java.lang.Math#cos} operand (converted to Radians)
-     *
-     * @param operand Actual operand
-     */
-    public void cos(Double operand) {
-        mResult = Math.cos(Math.toRadians(operand));
-        setChanged();
-    }
-
-    /**
-     * Compute a {@link java.lang.Math#cosh} operand (converted to Radians)
-     *
-     * @param operand Actual operand
-     */
-    public void cosh(Double operand) {
-        mResult = Math.cosh(Math.toRadians(operand));
-        setChanged();
-    }
-
-    /**
-     * Compute a {@link java.lang.Math#tan} operand (converted to Radians)
-     *
-     * @param operand Actual operand
-     */
-    public void tan(Double operand) {
-        mResult = Math.tan(Math.toRadians(operand));
-        setChanged();
-    }
-
-    /**
-     * Compute a {@link java.lang.Math#tanh} of operand (converted to Radians)
-     *
-     * @param operand Actual operand
-     */
-    public void tanh(Double operand) {
-        mResult = Math.tanh(Math.toRadians(operand));
-        setChanged();
-    }
-
-    /**
-     * Compute a {@link java.lang.Math#log10} of operand
-     *
-     * @param operand Actual operand
-     */
-    public void log(Double operand) {
-        mResult = Math.log10(operand);
-        setChanged();
-    }
-
-    /**
-     * Compute a {@link java.lang.Math#log} of operand
-     *
-     * @param operand Actual operand
-     */
-    public void ln(Double operand) {
-        mResult = Math.log(operand);
-        setChanged();
-    }
-
-    /**
-     * Compute a {@link java.lang.Math#pow} of 2 on {@link CalculatorModel#mResult}
-     *
-     * @param operand Actual operand
-     */
-    public void sqr(Double operand) {
-        mResult = Math.pow(operand, 2);
-        setChanged();
-    }
-
-    /**
-     * Compute a {@link java.lang.Math#sqrt} on operand
-     *
-     * @param operand Actual operand
-     */
-    public void sqrt(Double operand) {
-        if (operand < 0.0) {
-            isResultNaN = true;
-        }
-        mResult = Math.sqrt(operand);
-        setChanged();
-    }
-
-    /**
-     * Compute a {@link java.lang.Math#pow} of operand on {@link CalculatorModel#mResult}
-     *
-     * @param operand Actual operand
-     */
-    public void pow(Double operand) {
-        mResult = Math.pow(mResult, operand);
-        setChanged();
-    }
-
-    /**
-     * Inverse the actual operand act like 1/x where x is the operand
-     *
-     * @param operand Actual operand
-     */
-    public void inverse(Double operand) {
-        mResult = 1 / operand;
-        setChanged();
-    }
-
-    /**
-     * Change the sign of the actual operand
-     *
-     * @param operand Actual operand
-     */
-    public void negate(@SuppressWarnings("unused") Double operand) {
-        if (mOperand.charAt(0) == '-') {
-            mOperand = mOperand.substring(1);
-        } else {
-            mOperand = "-" + mOperand;
-        }
-        mOperator = mOldOperator;
-        needOperandUpdate = false;
-
-        setChanged();
-        notifyObservers(mOperand);
-    }
-
-    /**
-     * Set the operand to {@link java.lang.Math#PI}
-     */
-    public void pi() {
-        mResult = Math.PI;
-        mOperand = String.valueOf(Math.PI);
-        setChanged();
-    }
-
-    /**
-     * Set the operand to {@link java.lang.Math#E}
-     */
-    public void euler() {
-        mOperand = String.valueOf(Math.E);
-        mResult = Math.E;
-        setChanged();
-    }
-
-    /**
-     * @param a unused
-     * @see CalculatorModel#pi()
-     */
-    public void pi(@SuppressWarnings("unused") Double a) {
-        pi();
-    }
-
-    /**
-     * @param a unused
-     * @see CalculatorModel#euler()
-     */
-    public void euler(@SuppressWarnings("unused") Double a) {
-        euler();
-    }
-
-    /**
-     * @param a unused
-     * @see CalculatorModel#reset()
-     */
-    public void reset(@SuppressWarnings("unused") Double a) {
-        reset();
-    }
-
-    /**
-     * Reset the model like it was newly instantiated and notify views about his update
-     */
-    public void reset() {
-        mResult = 0.0;
-        mOperand = "0";
-        mOperator = "";
-        isResultNaN = false;
-        isDecimal = false;
-
-        setChanged();
-        notifyObservers(getSimplifiedResult());
-    }
-
-    /**
-     * @param a unused
-     * @see CalculatorModel#clear()
-     */
-    public void clear(@SuppressWarnings("unused") Double a) {
-        clear();
-    }
-
-    /**
-     * This method clear the actual display with "0"
-     * <p>
-     * Update {@link CalculatorModel#mOperator} with {@link CalculatorModel#mOldOperator}
-     */
-    public void clear() {
-        mOperator = mOldOperator;
-        isDecimal = false;
-
-        setChanged();
-        notifyObservers("0");
-    }
-
-    /**
-     * This method check the operator whether we must compute it now or later
-     * <p>
-     * Set {@link CalculatorModel#mOperator} and {@link CalculatorModel#mOldOperator}
-     * to the right value
-     *
-     * @param operator A math operator for calcul
-     */
-    public void setOperator(String operator) {
-        if (mSpecialOperators.contains(operator)) {
-            if (!"equal".equals(operator)) {
-                mOldOperator = mOperator;
-                mOperator = operator;
-            }
-            computeData();
-        } else {
-            computeData();
-            mOldOperator = mOperator;
-            mOperator = operator;
-        }
-
-        if (!mSpecialOperators.contains(operator)) {
-            mOperand = "";
-            isDecimal = false;
-        }
+        notifyObservers(mExpr);
     }
 
     /**
      * This method concatenate a number the user clicked on
      *
-     * @param operand A number
+     * @param number A number
      */
-    public void setOperand(String operand) {
-        if (isDecimal && ".".equals(operand)) {
-            return ;
-        } else if (!isDecimal && ".".equals(operand)) {
+    public void addNumber(String number) {
+        if ("pi".equals(number)) {
+            number = String.valueOf(Math.PI);
+        } else if ("euler".equals(number)) {
+            number = String.valueOf(Math.E);
+        }
+
+        if (isDecimal && ".".equals(number)) {
+            return;
+        } else if (!isDecimal && ".".equals(number)) {
             isDecimal = true;
         }
-        mOperand += operand;
 
-        setChanged();
-        notifyObservers(mOperand);
+        mExpr += number;
+
+        notifyObservers(mExpr);
     }
 
     /**
@@ -460,5 +105,35 @@ public class CalculatorModel extends Observable {
         df.setGroupingUsed(false);
 
         return df.format(bd);
+    }
+
+    public void parseExpression() {
+        try {
+            mResult = MathEvaluator.getInstance().parse(mExpr);
+            mExpr = getSimplifiedResult();
+
+            notifyObservers(mExpr);
+        } catch (IllegalArgumentException e) {
+            notifyObservers(e.getMessage());
+            mExpr = "";
+            mResult = 0.0;
+            isDecimal = false;
+        }
+    }
+
+    public void clear() {
+        if (mExpr.length() > 0) {
+            mExpr = mExpr.substring(0, mExpr.length() - 1);
+        }
+
+        notifyObservers(mExpr);
+    }
+
+    public void reset() {
+        mExpr = "";
+        mResult = 0.0;
+        isDecimal = false;
+
+        notifyObservers(mExpr);
     }
 }

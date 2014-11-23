@@ -4,14 +4,14 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * {@link me.zirko.ui.CalculatorView} is the view that interacts with the user and send
  * his inputs to the {@link me.zirko.controller.CalculatorController}
  * It initialize the window the user will interact with.
- *
+ * <p>
  * It implements {@link java.util.Observer} interface because of the MVC and
  * Observer/Observable design patter between the view and the model {@link me.zirko.model.CalculatorModel}
  *
@@ -20,11 +20,10 @@ import java.util.Map;
  * @since 1.0
  */
 public class CalculatorPanel extends JPanel {
-    private Map<String, JButton> mButtons = new LinkedHashMap<>();
-
+    private List<JButton> mButtons = new ArrayList<>();
     private LayoutManager mLayoutManager;
     private LayoutManager mChildLayoutManager = new GridLayout(5, 7);
-    private JLabel mResult = new JLabel("0");
+    private JLabel mResult = new JLabel("");
     private JPanel[] mRow = new JPanel[2];
     private LayoutManager mFlowLayout = new FlowLayout(FlowLayout.CENTER, 5, 5);
     private Font mFont = new Font(null, Font.BOLD, 20);
@@ -50,10 +49,7 @@ public class CalculatorPanel extends JPanel {
         mRow[1].setLayout(mChildLayoutManager);
 
 
-        for (Map.Entry<String, JButton> entry : mButtons.entrySet()) {
-            JButton button = entry.getValue();
-            button.addActionListener(mListener);
-            button.setActionCommand(entry.getKey());
+        for (JButton button : mButtons) {
             mRow[1].add(button);
         }
 
@@ -68,41 +64,41 @@ public class CalculatorPanel extends JPanel {
     }
 
     private void initComponent() {
-        mButtons.put("inverse", new FunctionButton("1/x"));
-        mButtons.put("sqr", new FunctionButton("x²"));
-        mButtons.put("sqrt", new FunctionButton("√"));
-        mButtons.put("negate", new FunctionButton("+/-"));
-        mButtons.put("modulo", new FunctionButton("%"));
-        mButtons.put("clear", new FunctionButton("C"));
-        mButtons.put("reset", new FunctionButton("AC"));
-        mButtons.put("7", new NumberButton("7"));
-        mButtons.put("8", new NumberButton("8"));
-        mButtons.put("9", new NumberButton("9"));
-        mButtons.put("add", new FunctionButton("+"));
-        mButtons.put("sin", new FunctionButton("sin"));
-        mButtons.put("cos", new FunctionButton("cos"));
-        mButtons.put("tan", new FunctionButton("tan"));
-        mButtons.put("4", new NumberButton("4"));
-        mButtons.put("5", new NumberButton("5"));
-        mButtons.put("6", new NumberButton("6"));
-        mButtons.put("subtraction", new FunctionButton("-"));
-        mButtons.put("sinh", new FunctionButton("sinh"));
-        mButtons.put("cosh", new FunctionButton("cosh"));
-        mButtons.put("tanh", new FunctionButton("tanh"));
-        mButtons.put("1", new NumberButton("1"));
-        mButtons.put("2", new NumberButton("2"));
-        mButtons.put("3", new NumberButton("3"));
-        mButtons.put("multiplication", new FunctionButton("*"));
-        mButtons.put("log", new FunctionButton("log"));
-        mButtons.put("ln", new FunctionButton("ln"));
-        mButtons.put("exp", new FunctionButton("exp"));
-        mButtons.put("0", new NumberButton("0"));
-        mButtons.put(".", new NumberButton("."));
-        mButtons.put("equal", new FunctionButton("="));
-        mButtons.put("division", new FunctionButton("/"));
-        mButtons.put("pi", new FunctionButton("Pi"));
-        mButtons.put("euler", new FunctionButton("e"));
-        mButtons.put("pow", new FunctionButton("x^y"));
+        mButtons.add(new FunctionButton("1÷x", "1÷", true, mListener));
+        mButtons.add(new FunctionButton("x²", "^2", true, mListener));
+        mButtons.add(new FunctionButton("√", "√ ", true, mListener));
+        mButtons.add(new FunctionButton("±", "-", true, mListener));
+        mButtons.add(new FunctionButton("mod", "mod ", true, mListener));
+        mButtons.add(new FunctionButton("C", "clear", mListener));
+        mButtons.add(new FunctionButton("AC", "reset", mListener));
+        mButtons.add(new NumberButton("7", "7", mListener));
+        mButtons.add(new NumberButton("8", "8", mListener));
+        mButtons.add(new NumberButton("9", "9", mListener));
+        mButtons.add(new FunctionButton("+", "add", mListener));
+        mButtons.add(new FunctionButton("sin", "sin ", true, mListener));
+        mButtons.add(new FunctionButton("cos", "cos ", true, mListener));
+        mButtons.add(new FunctionButton("tan", "tan ", true, mListener));
+        mButtons.add(new NumberButton("4", "4", mListener));
+        mButtons.add(new NumberButton("5", "5", mListener));
+        mButtons.add(new NumberButton("6", "6", mListener));
+        mButtons.add(new FunctionButton("-", "subtraction", mListener));
+        mButtons.add(new FunctionButton("sinh", "sinh ", true, mListener));
+        mButtons.add(new FunctionButton("cosh", "cosh ", true, mListener));
+        mButtons.add(new FunctionButton("tanh", "tanh ", true, mListener));
+        mButtons.add(new NumberButton("1", "1", mListener));
+        mButtons.add(new NumberButton("2", "2", mListener));
+        mButtons.add(new NumberButton("3", "3", mListener));
+        mButtons.add(new FunctionButton("×", "multiplication", mListener));
+        mButtons.add(new FunctionButton("log", "log ", true, mListener));
+        mButtons.add(new FunctionButton("ln", "ln ", true, mListener));
+        mButtons.add(new FunctionButton("exp", "exp ", true, mListener));
+        mButtons.add(new NumberButton("0", "0", mListener));
+        mButtons.add(new NumberButton(".", ".", mListener));
+        mButtons.add(new FunctionButton("=", "equal", mListener));
+        mButtons.add(new FunctionButton("÷", "division", mListener));
+        mButtons.add(new NumberButton("ℼ", "pi", mListener));
+        mButtons.add(new NumberButton("ℯ", "euler", mListener));
+        mButtons.add(new FunctionButton("x^y", "^", true, mListener));
     }
 
     public void setResult(String res) {

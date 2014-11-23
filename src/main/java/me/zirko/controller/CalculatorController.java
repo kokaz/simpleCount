@@ -23,6 +23,7 @@ public class CalculatorController implements ActionListener {
 
     /**
      * Construct the controller with a {@link me.zirko.model.CalculatorModel}
+     *
      * @param model The model the controller should interact with
      */
     public CalculatorController(CalculatorModel model) {
@@ -36,9 +37,19 @@ public class CalculatorController implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         Object o = e.getSource();
         if (o instanceof NumberButton) {
-            mModel.setOperand(((JButton) o).getActionCommand());
+            mModel.addNumber(((JButton) o).getActionCommand());
         } else if (o instanceof FunctionButton) {
-            mModel.setOperator(((JButton) o).getActionCommand());
+            FunctionButton fBt = (FunctionButton) o;
+
+            if ("equal".equals(fBt.getActionCommand())) {
+                mModel.parseExpression();
+            } else if ("clear".equals(fBt.getActionCommand())) {
+                mModel.clear();
+            } else if ("reset".equals(fBt.getActionCommand())) {
+                mModel.reset();
+            } else {
+                mModel.setOperator(fBt.getActionCommand(), fBt.getText(), fBt.isScientific());
+            }
         }
     }
 }
