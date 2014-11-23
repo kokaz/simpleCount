@@ -46,6 +46,7 @@ public class CalculatorModel extends Observable {
         } else {
             mExpr += label;
         }
+        isDecimal = false;
 
         notifyObservers(mExpr);
     }
@@ -107,7 +108,7 @@ public class CalculatorModel extends Observable {
         return df.format(bd);
     }
 
-    public void parseExpression() {
+    public boolean parseExpression() {
         try {
             mResult = MathEvaluator.getInstance().parse(mExpr);
             mExpr = getSimplifiedResult();
@@ -118,7 +119,9 @@ public class CalculatorModel extends Observable {
             mExpr = "";
             mResult = 0.0;
             isDecimal = false;
+            return false;
         }
+        return true;
     }
 
     public void clear() {
