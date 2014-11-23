@@ -21,3 +21,7 @@ mainClassName = 'me.zirko.SimpleCount'
 task wrapper(type: Wrapper) {
     gradleVersion = '2.1'
 }
+
+dependencies {
+    testCompile 'junit:junit:4.+'
+}
