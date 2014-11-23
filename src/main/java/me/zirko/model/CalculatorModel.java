@@ -40,6 +40,13 @@ public class CalculatorModel extends Observable {
         super.notifyObservers(argStr);
     }
 
+    /**
+     * Add an operator in the expression
+     *
+     * @param actionCommand ActionCommand of the button clicked
+     * @param label         Label display by the button clicked
+     * @param isScientific  Is the button a scientific function
+     */
     public void setOperator(String actionCommand, String label, boolean isScientific) {
         if (isScientific) {
             mExpr += actionCommand;
@@ -52,7 +59,7 @@ public class CalculatorModel extends Observable {
     }
 
     /**
-     * This method concatenate a number the user clicked on
+     * Add a number in the expression
      *
      * @param number A number
      */
@@ -108,6 +115,15 @@ public class CalculatorModel extends Observable {
         return df.format(bd);
     }
 
+    /**
+     * Read and evaluate the expression built with the class methods
+     *
+     * <p>
+     * The method use the helper class {@link me.zirko.util.MathEvaluator} to evaluate and compute
+     * an arithmetic expression
+     *
+     * @return {@code True} if the expression is valid, else {@code False}
+     */
     public boolean parseExpression() {
         try {
             mResult = MathEvaluator.getInstance().parse(mExpr);
@@ -124,6 +140,9 @@ public class CalculatorModel extends Observable {
         return true;
     }
 
+    /**
+     * Clear the display
+     */
     public void clear() {
         if (mExpr.length() > 0) {
             mExpr = mExpr.substring(0, mExpr.length() - 1);
@@ -132,6 +151,9 @@ public class CalculatorModel extends Observable {
         notifyObservers(mExpr);
     }
 
+    /**
+     * Reset the model
+     */
     public void reset() {
         mExpr = "";
         mResult = 0.0;
